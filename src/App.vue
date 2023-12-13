@@ -38,14 +38,14 @@ const routes ={
 
 const currentPath = ref(window.location.hash)
 
-window.addEventListener('hashchange', () => {
+window.addEventListener('hashchange', async() => {
   currentPath.value = window.location.hash
   //Check if user is already logged in
   var token = localStorage.getItem('accessToken');
   if(routesToCheck.includes(currentPath.value)){
     if(token != null){
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.get('https://localhost:7013/Access')
+      await axios.get('https://localhost:7013/Access/IsAuthenticated')
         .then(() =>{
           //User is logged in, so redirect to tower
           window.location.href = '/#/tower';
@@ -61,7 +61,7 @@ window.addEventListener('hashchange', () => {
   if(routesToCheckForAccess.includes(currentPath.value)){
     if(token != null){
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      axios.get('https://localhost:7013/Access')
+      axios.get('https://localhost:7013/Access/IsAuthenticated')
         .then(() =>{
           //token is there and user is logged in, so continue with opening the tower
         })
@@ -79,8 +79,6 @@ window.addEventListener('hashchange', () => {
       console.log('Please log in first');
     }
   }
-
-
 
 })
 
